@@ -1,9 +1,18 @@
 require 'spec_helper'
 
-RSpec.describe Terms::User do
+RSpec.describe Duralex::User do
+
+  class FakeUser
+    def self.before_create(*args)
+    end
+    def self.validates(*args)
+    end
+
+    include Duralex::Model
+  end
 
   before do
-    allow(Terms).to receive(:definitions).and_return({
+    allow(Duralex).to receive(:definitions).and_return({
       documents: Proc.new do |user|
         if user.admin?
           nil
@@ -22,19 +31,19 @@ RSpec.describe Terms::User do
   end
 
   describe '#[]' do
-    subject { Terms[user] }
+    subject { Duralex[user] }
     context 'with regular user' do
-      let(:user) { build(:user) }
-      it { expect(subject).to be_kind_of Terms::User }
+      let(:user) { FakeUser.new }
+      it { expect(subject).to be_kind_of Duralex::User }
     end
     context 'with nil user' do
       let(:user) { nil }
-      it { expect(subject).to be_kind_of Terms::Guest }
+      it { expect(subject).to be_kind_of Duralex::Guest }
     end
   end
 
   describe '#documents' do
-    subject { Terms[user].documents }
+    subject { Duralex[user].documents }
 
     context 'with nil user' do
       let(:user)  { nil }
@@ -66,7 +75,7 @@ RSpec.describe Terms::User do
   end
 
   describe '#up_to_date?' do
-    subject { Terms[user].up_to_date? }
+    subject { Duralex[user].up_to_date? }
     context 'nil user' do
       let(:user) { nil }
       it { expect(subject).to be_truthy }

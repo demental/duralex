@@ -4,11 +4,12 @@ gemspec
 
 group :test do
   gem "rails"
-  gem "codeclimate-test-reporter", group: :test, require: nil
+  gem "codeclimate-test-reporter", require: nil
 end
 
 group :development, :test do
   gem "rake"
-  gem "minitest"
+  gem "rspec"
+  gem "timecop"
 end
 
