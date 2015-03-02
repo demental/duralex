@@ -2,6 +2,15 @@ require 'spec_helper'
 
 RSpec.describe Duralex::User do
 
+  class FakeUser
+    def self.before_create(*args)
+    end
+    def self.validates(*args)
+    end
+
+    include Duralex::Model
+  end
+
   before do
     allow(Duralex).to receive(:definitions).and_return({
       documents: Proc.new do |user|
@@ -24,7 +33,7 @@ RSpec.describe Duralex::User do
   describe '#[]' do
     subject { Duralex[user] }
     context 'with regular user' do
-      let(:user) { build(:user) }
+      let(:user) { FakeUser.new }
       it { expect(subject).to be_kind_of Duralex::User }
     end
     context 'with nil user' do

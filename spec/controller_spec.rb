@@ -8,7 +8,7 @@ RSpec.describe Duralex::Controller do
         'some_tos'
       end,
       validation: Proc.new do |user, doc|
-        user.terms_accepted_at > (Time.zone.now - T_1_HOUR)
+        user.terms_accepted_at > (Time.zone.now - 1.hour)
       end
     })
   end
@@ -39,7 +39,7 @@ RSpec.describe Duralex::Controller do
     end
 
     context 'when user needs to validate' do
-      let(:user) { double(accept_tos!: true, terms_accepted_at: (Time.zone.now - T_2_HOURS)) }
+      let(:user) { double(accept_tos!: true, terms_accepted_at: (Time.zone.now - 2.hours)) }
 
       context 'out of tos path' do
         it 'raises Duralex::ExpiredTosError' do
