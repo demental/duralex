@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-RSpec.describe Terms::Controller do
+RSpec.describe Duralex::Controller do
 
   before do
-    allow(Terms).to receive(:definitions).and_return({
+    allow(Duralex).to receive(:definitions).and_return({
       documents: Proc.new do |user|
         'some_tos'
       end,
@@ -14,7 +14,7 @@ RSpec.describe Terms::Controller do
   end
 
   class DummyController < ActionController::Base
-    include Terms::Controller
+    include Duralex::Controller
   end
 
   class TosOnlyController < DummyController
@@ -33,7 +33,7 @@ RSpec.describe Terms::Controller do
     context 'when user does not need to validate' do
       let(:user) { double(accept_tos!: true, terms_accepted_at: (Time.zone.now)) }
 
-      it 'does not raise Terms::ExpiredTosError' do
+      it 'does not raise Duralex::ExpiredTosError' do
         expect { subject }.not_to raise_error
       end
     end
@@ -42,8 +42,8 @@ RSpec.describe Terms::Controller do
       let(:user) { double(accept_tos!: true, terms_accepted_at: (Time.zone.now - T_2_HOURS)) }
 
       context 'out of tos path' do
-        it 'raises Terms::ExpiredTosError' do
-          expect { subject }.to raise_error(Terms::ExpiredTosError)
+        it 'raises Duralex::ExpiredTosError' do
+          expect { subject }.to raise_error(Duralex::ExpiredTosError)
         end
       end
     end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Terms::Model do
+RSpec.describe Duralex::Model do
   let(:time) { Time.zone.now }
   before     { Timecop.freeze(time) }
 
